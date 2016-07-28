@@ -2,7 +2,8 @@
   indent:2
 */
 /*global $, jQuery */
-(function() {
+
+(function () {
   'use strict';
   var s,
     render,
@@ -16,11 +17,10 @@
     whenAll,
     fetchReadmes,
     buildNavigation;
-    
-  
+
   // Micro templating
-  render = function(string, data) {
-    for(s in data) {
+  render = function (string, data) {
+    for (s in data) {
       string = string.replace(new RegExp('{'+s+'}', 'g'), data[s]);
     }
     return string;
@@ -31,20 +31,17 @@
   // Usage: var tmpl = template('Hi {name}')
   //        var rendered = tmpl({name: 'Johan'})
   //        => 'Hi Johan'
-  template = function(string) {
-    'use strict';
+  template = function (string) {
     return render.bind(this, string);
   };
   
-  getExercises = function() {
-    'use strict';
+  getExercises = function () {
     return $.getJSON('exercises.json').then(function(res) {
       return res;
     });
   };
   
-  getReadmeForExercise = function(exercise) {
-    'use strict';
+  getReadmeForExercise = function (exercise) {
     return $.get('exercises/' + exercise.name + '/README.html');
   };
   
@@ -53,15 +50,13 @@
   //   **Svårighetsgrad: **<level>
   //   Svårighetsgrad <level>
   //   etc.
-  extractLevel = function(content) {
-    'use strict';
+  extractLevel = function (content) {
     var matches = content.match(/Svårighetsgrad[\D]*(\d)/i);
     return matches ? matches[1] : false;
   };
   
   // Create a plain object for templating
-  transformExercise = function(exercise, i) {
-    'use strinct';
+  transformExercise = function (exercise, i) {
     var content = exercise.readme;
     var files = exercise.files;
     var name = $(content).filter("h1").first().text();
@@ -70,7 +65,7 @@
     if (files.length > 0) {
   
       var items = [];
-      files.forEach(function(file) {
+      files.forEach(function (file) {
         items.push('<a href="exercises/' + exercise.name + '/' + file + '" download>' + file + '</a>');
       });
   
@@ -97,8 +92,7 @@
   };
   
   // Comparator function for exercises
-  sortByLevel = function(exercises) {
-    'use strict';
+  sortByLevel = function (exercises) {
     return exercises.sort(function(e1, e2) {
       return (e1.level > e2.level) ? 1 :
         (e1.level < e2.level) ? -1 : 0;
@@ -106,8 +100,7 @@
   };
   
   // Build the list from an exercises object array
-  renderReadmeList = function(exercises) {
-    'use strict';
+  renderReadmeList = function (exercises) {
     var $container = $(".exercises-list"),
         tmpl = template($("#exercise-template").html());
   
@@ -120,8 +113,7 @@
   // returns a promise whose argument is
   // an array with all data objects. Takes
   // and array of promises
-  whenAll = function(promises) {
-    'use strict';
+  whenAll = function (promises) {
     var slice = Array.prototype.slice;
     return $.when.apply($, promises).then(function() {
       return slice.call(arguments).map(function(r) {
@@ -133,9 +125,7 @@
   };
   
   // Fetch READMEs and build list
-  fetchReadmes = function() {
-    'use strict';
-  
+  fetchReadmes = function () {
     // Fetch exercises
     getExercises()
   
@@ -169,8 +159,6 @@
   };
   
   buildNavigation = (function($) {
-    'use strict';
-  
     var defaults = {
       container: "body",
       nodes: "h1",
@@ -204,8 +192,6 @@
   })(jQuery);
   
   $(function() {
-    'use strict';
-  
     fetchReadmes();
   
     buildNavigation({
