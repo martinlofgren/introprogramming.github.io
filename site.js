@@ -7,7 +7,7 @@
   'use strict';
   var s,
     render,
-    template,
+    partial,
     getExercises,
     getReadmeForExercise,
     extractLevel,
@@ -26,13 +26,10 @@
     return string;
   };
   
-  // Create a template function bound to a
-  // template string ready for rendering data
-  // Usage: var tmpl = template('Hi {name}')
-  //        var rendered = tmpl({name: 'Johan'})
-  //        => 'Hi Johan'
-  template = function (string) {
-    return render.bind(this, string);
+  // Returns a function with an argument already applied; a partially applied
+  // function.
+  partial = function (f, argument) {
+    return f.bind(this, argument);
   };
   
   getExercises = function () {
@@ -102,7 +99,7 @@
   // Build the list from an exercises object array
   renderReadmeList = function (exercises) {
     var $container = $(".exercises-list"),
-        tmpl = template($("#exercise-template").html());
+      tmpl = partial(render, $("#exercise-template").html());
   
     // Render each exercise with 'tmpl', whose only argument
     // is a data object (given in Array.map).
