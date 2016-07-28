@@ -1,5 +1,9 @@
+/*jslint
+  indent:2
+*/
 (function() {
-
+  'use strict';
+  
 // Micro templating
 var render = function(string, data) {
   for(var s in data) {
@@ -14,16 +18,19 @@ var render = function(string, data) {
 //        var rendered = tmpl({name: 'Johan'})
 //        => 'Hi Johan'
 var template = function(string) {
+  'use strict';
   return render.bind(this, string)
 }
 
 var getExercises = function() {
+  'use strict';
   return $.getJSON('exercises.json').then(function(res) {
     return res
   })
 }
 
 var getReadmeForExercise = function(exercise) {
+  'use strict';
   return $.get('exercises/' + exercise.name + '/README.html')
 }
 
@@ -33,12 +40,14 @@ var getReadmeForExercise = function(exercise) {
 //   Svårighetsgrad <level>
 //   etc.
 var extractLevel = function(content) {
+  'use strict';
   var matches = content.match(/Svårighetsgrad[\D]*(\d)/i)
   return matches ? matches[1] : false
 }
 
 // Create a plain object for templating
 var transformExercise = function(exercise, i) {
+  'use strinct';
   var content = exercise.readme
   var files = exercise.files
   var name = $(content).filter("h1").first().text()
@@ -75,6 +84,7 @@ var transformExercise = function(exercise, i) {
 
 // Comparator function for exercises
 var sortByLevel = function(exercises) {
+  'use strict';
   return exercises.sort(function(e1, e2) {
     return (e1.level > e2.level) ? 1 :
       (e1.level < e2.level) ? -1 : 0
@@ -83,6 +93,7 @@ var sortByLevel = function(exercises) {
 
 // Build the list from an exercises object array
 var renderReadmeList = function(exercises) {
+  'use strict';
   var $container = $(".exercises-list"),
       tmpl = template($("#exercise-template").html())
 
@@ -96,6 +107,7 @@ var renderReadmeList = function(exercises) {
 // an array with all data objects. Takes
 // and array of promises
 var whenAll = function(promises) {
+  'use strict';
   var slice = Array.prototype.slice
   return $.when.apply($, promises).then(function() {
     return slice.call(arguments).map(function(r) {
@@ -108,6 +120,7 @@ var whenAll = function(promises) {
 
 // Fetch READMEs and build list
 var fetchReadmes = function() {
+  'use strict';
 
   // Fetch exercises
   getExercises()
@@ -142,6 +155,7 @@ var fetchReadmes = function() {
 }
 
 var buildNavigation = (function($) {
+  'use strict';
 
   var defaults = {
     container: "body",
@@ -176,6 +190,7 @@ var buildNavigation = (function($) {
 })(jQuery)
 
 $(function() {
+  'use strict';
 
   fetchReadmes()
 
