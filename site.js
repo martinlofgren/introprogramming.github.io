@@ -1,4 +1,4 @@
-;(function() {
+(function() {
 
 // Micro templating
 var render = function(string, data) {
