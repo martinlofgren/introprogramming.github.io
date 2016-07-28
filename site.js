@@ -4,10 +4,23 @@
 /*global $, jQuery */
 (function() {
   'use strict';
+  var s,
+    render,
+    template,
+    getExercises,
+    getReadmeForExercise,
+    extractLevel,
+    transformExercise,
+    sortByLevel,
+    renderReadmeList,
+    whenAll,
+    fetchReadmes,
+    buildNavigation;
+    
   
   // Micro templating
-  var render = function(string, data) {
-    for(var s in data) {
+  render = function(string, data) {
+    for(s in data) {
       string = string.replace(new RegExp('{'+s+'}', 'g'), data[s]);
     }
     return string;
@@ -18,19 +31,19 @@
   // Usage: var tmpl = template('Hi {name}')
   //        var rendered = tmpl({name: 'Johan'})
   //        => 'Hi Johan'
-  var template = function(string) {
+  template = function(string) {
     'use strict';
     return render.bind(this, string);
   };
   
-  var getExercises = function() {
+  getExercises = function() {
     'use strict';
     return $.getJSON('exercises.json').then(function(res) {
       return res;
     });
   };
   
-  var getReadmeForExercise = function(exercise) {
+  getReadmeForExercise = function(exercise) {
     'use strict';
     return $.get('exercises/' + exercise.name + '/README.html');
   };
@@ -40,14 +53,14 @@
   //   **Svårighetsgrad: **<level>
   //   Svårighetsgrad <level>
   //   etc.
-  var extractLevel = function(content) {
+  extractLevel = function(content) {
     'use strict';
     var matches = content.match(/Svårighetsgrad[\D]*(\d)/i);
     return matches ? matches[1] : false;
   };
   
   // Create a plain object for templating
-  var transformExercise = function(exercise, i) {
+  transformExercise = function(exercise, i) {
     'use strinct';
     var content = exercise.readme;
     var files = exercise.files;
@@ -84,7 +97,7 @@
   };
   
   // Comparator function for exercises
-  var sortByLevel = function(exercises) {
+  sortByLevel = function(exercises) {
     'use strict';
     return exercises.sort(function(e1, e2) {
       return (e1.level > e2.level) ? 1 :
@@ -93,7 +106,7 @@
   };
   
   // Build the list from an exercises object array
-  var renderReadmeList = function(exercises) {
+  renderReadmeList = function(exercises) {
     'use strict';
     var $container = $(".exercises-list"),
         tmpl = template($("#exercise-template").html());
@@ -107,7 +120,7 @@
   // returns a promise whose argument is
   // an array with all data objects. Takes
   // and array of promises
-  var whenAll = function(promises) {
+  whenAll = function(promises) {
     'use strict';
     var slice = Array.prototype.slice;
     return $.when.apply($, promises).then(function() {
@@ -120,7 +133,7 @@
   };
   
   // Fetch READMEs and build list
-  var fetchReadmes = function() {
+  fetchReadmes = function() {
     'use strict';
   
     // Fetch exercises
@@ -155,7 +168,7 @@
       .then(renderReadmeList);
   };
   
-  var buildNavigation = (function($) {
+  buildNavigation = (function($) {
     'use strict';
   
     var defaults = {
