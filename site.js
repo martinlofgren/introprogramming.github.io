@@ -54,8 +54,9 @@ var transformExercise = function(exercise, i) {
     var filesText = '\n<h2>Filer</h2>\n' + items.join(", ")
 
     // Inject list of files before first h2, or at the end if there are none
-    var $html = $('<div />', { html: content })
-    h2s = $html.find('h2')
+    var $html = $('<div />', { html: content }),
+        h2s = $html.find('h2');
+        
     if (h2s.length > 0) {
       h2s.first().before(filesText)
     } else {
